@@ -59,26 +59,14 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@766400ca14a75010e7b2e3119aa0d5b46826e8c7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           
       - name: Get latest calibre release
         id: get_calibre_release
-        # You may pin to the exact commit or the version.
-        # uses: rez0n/actions-github-release@3484102f3a02e62daa247bc38b861e3d0eefe9a6
-        uses: rez0n/actions-github-release@v1.8
-        env:
-          # The repository name in full formar (owner/repo)
-          repository: "kovidgoyal/calibre"
-          # Wanted release type (latest, stable, draft, nodraft)
-          type: stable
-
+        shell: bash
+        run: |
+          CALIBRE_RELEASE=$(curl -sX GET "https://api.github.com/repos/kovidgoyal/calibre/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
+          echo Current calibre release: $CALIBRE_RELEASE
+          echo "release=$CALIBRE_RELEASE" >> $GITHUB_OUTPUT
       - name: Extract Base Image Tag
         id: dockerfile_regex
         shell: bash
@@ -87,6 +75,17 @@ jobs:
           echo Base image version: $version
           echo "version=$version" >> $GITHUB_OUTPUT
           
+      # Extract metadata (tags, labels) for Docker
+      # https://github.com/docker/metadata-action
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@766400ca14a75010e7b2e3119aa0d5b46826e8c7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref
+            type=sha
+            type=raw,${{ steps.dockerfile_regex.outputs.version }}-calibre-${{ steps.get_calibre_release.outputs.release }}
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
@@ -94,9 +93,9 @@ jobs:
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
           context: .
-          build-args: CALIBRE_RELEASE=${{ steps.get_calibre_release.output.release }}
+          build-args: CALIBRE_RELEASE=${{ steps.get_calibre_release.outputs.release }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }},${{ steps.dockerfile_regex.output.version }}-calibre-${{ steps.get_calibre_release.output.release }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
