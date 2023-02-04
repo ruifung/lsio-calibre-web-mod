@@ -85,7 +85,6 @@ jobs:
           tags: |
             type=ref,event=branch
             type=ref,event=tag
-            type=ref,event=workflow_dispatch
             type=sha
             type=raw,${{ steps.dockerfile_regex.outputs.version }}-calibre-${{ steps.get_calibre_release.outputs.release }}
       # Build and push Docker image with Buildx (don't push on PR)
