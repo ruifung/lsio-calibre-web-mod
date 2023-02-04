@@ -73,7 +73,7 @@ jobs:
         # You may pin to the exact commit or the version.
         # uses: rez0n/actions-github-release@3484102f3a02e62daa247bc38b861e3d0eefe9a6
         uses: rez0n/actions-github-release@v1.8
-        with:
+        env:
           # The repository name in full formar (owner/repo)
           repository: "kovidgoyal/calibre"
           # Wanted release type (latest, stable, draft, nodraft)
