@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 export DEBIAN_FRONTEND="noninteractive"
 
 PACKAGES+=("xz-utils")
@@ -54,6 +55,7 @@ tar xf \
     -C /app/calibre
 
 rm /tmp/calibre.txz
+set +e
 
 if [ ! -e /usr/bin/calibre-server ]; then
     /app/calibre/calibre_postinstall
