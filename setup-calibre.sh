@@ -38,15 +38,15 @@ mkdir -p \
     /app/calibre
 
 if [ "$(uname -m)" == "x86_64" ]; then
-    curl -o \
-        /tmp/calibre.txz -L \
-        "https://github.com/kovidgoyal/calibre/releases/download/${CALIBRE_RELEASE}/calibre-${CALIBRE_RELEASE:1}-x86_64.txz"
+    CALIBRE_URL="https://github.com/kovidgoyal/calibre/releases/download/${CALIBRE_RELEASE}/calibre-${CALIBRE_RELEASE:1}-x86_64.txz"
+    echo Calibre URL: $CALIBRE_URL
+    curl -o /tmp/calibre.txz -L $CALIBRE_URL
 fi
 
 if [ "$(uname -m)" == "aarch64" ]; then
-    curl -o \
-        /tmp/calibre.txz -L \
-        "https://github.com/kovidgoyal/calibre/releases/download/${CALIBRE_RELEASE}/calibre-${CALIBRE_RELEASE:1}-arm64.txz"
+    CALIBRE_URL="https://github.com/kovidgoyal/calibre/releases/download/${CALIBRE_RELEASE}/calibre-${CALIBRE_RELEASE:1}-arm64.txz"
+    echo Calibre URL: $CALIBRE_URL
+    curl -o /tmp/calibre.txz -L $CALIBRE_URL
 fi
 
 tar xf \
