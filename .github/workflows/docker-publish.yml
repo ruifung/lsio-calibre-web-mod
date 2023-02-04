@@ -81,14 +81,12 @@ jobs:
 
       - name: Extract Base Image Tag
         id: dockerfile_regex
-        uses: tilation/regex-on-repo@15e81d7d784b76981c4b7381f8f646d5fa988f25
-        with:
-          github: ${{ github.repository }}
-          ref:  ${{ github.ref }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          regex: '^FROM .+/calibre-web:(\d+\.\d+\.\d+)-ls\d{3}$'
-          file: 'Dockerfile'
-          debug: true
+        shell: bash
+        run: |
+          version=$(grep -Po 'FROM .+:\d+\.\d+.\d+-ls\d{3}' Dockerfile | grep -Po '\d+\.\d+.\d+')
+          echo Base image version: $version
+          echo "version=$version" >> $GITHUB_OUTPUT
+          
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
       - name: Build and push Docker image
@@ -98,7 +96,7 @@ jobs:
           context: .
           build-args: CALIBRE_RELEASE=${{ steps.get_calibre_release.output.release }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }},${{ steps.dockerfile_regex.output.match_0_group_0 }}-calibre-${{ steps.get_calibre_release.output.release }}
+          tags: ${{ steps.meta.outputs.tags }},${{ steps.dockerfile_regex.output.version }}-calibre-${{ steps.get_calibre_release.output.release }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
