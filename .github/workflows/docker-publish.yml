@@ -75,7 +75,7 @@ jobs:
         uses: rez0n/actions-github-release@v1.8
         with:
           # The repository name in full formar (owner/repo)
-          repository: kovidgoyal/calibre
+          repository: "kovidgoyal/calibre"
           # Wanted release type (latest, stable, draft, nodraft)
           type: stable
 
