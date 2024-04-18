@@ -2,8 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "packageRules": [
     {
-      "matchPackageNames": ["lscr.io/linuxserver/calibre-web"],
-      "allowedVersions": "/^[0-9]{1,3}\\.[0-9]+\\.[0-9]+-ls.*$/"
+      "packagePatterns": ["^ghcr.io\\/linuxserver\\/", "^lscr.io\\/linuxserver\\/", "^linuxserver\\/"],
+      "versioning": "regex:^(?<compatibility>.*?)-v?(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)[.-]*r?(?<build>\\d+)*-*r?(?<release>\\w+)*"
     },
     {
       "matchManagers":  ["github-actions"],
