@@ -71,7 +71,7 @@ jobs:
         id: dockerfile_regex
         shell: bash
         run: |
-          version=$(grep -Po 'FROM .+:\d+\.\d+.\d+' Dockerfile | grep -Po '\d+\.\d+.\d+')
+          version=$(perl -ne 'm/FROM .+:(?:.+-)?((?:\d+\.?){3})/ && print "$1"' version)
           echo Base image version: $version
           echo "version=$version" >> $GITHUB_OUTPUT
           
