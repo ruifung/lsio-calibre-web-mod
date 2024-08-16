@@ -3,7 +3,7 @@
   "packageRules": [
     {
       "packagePatterns": ["^ghcr.io\\/linuxserver\\/calibre-web", "^lscr.io\\/linuxserver\\/calibre-web", "^linuxserver\\/calibre-web"],
-      "versioning": "regex:^(?:(?P<compatibility>.+)-)?(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)-?r?(?P<release>\\w+)?"
+      "versioning": "regex:^(?:(?P<compatibility>.+)-)?(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)-?(?P<release>\\w+)?"
     },
     {
       "matchManagers":  ["github-actions"],
