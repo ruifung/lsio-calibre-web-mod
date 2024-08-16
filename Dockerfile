@@ -1,5 +1,5 @@
 ARG CALIBRE_RELEASE
 ARG BUILDARCH
-FROM lscr.io/linuxserver/calibre-web:0.6.23-ls284
+FROM lscr.io/linuxserver/calibre-web:version-0.6.23
 COPY setup-calibre.sh /setup-calibre.sh
 RUN CALIBRE_RELEASE=${CALIBRE_RELEASE} chmod u+x /setup-calibre.sh && /setup-calibre.sh
