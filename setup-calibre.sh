@@ -5,7 +5,7 @@ export DEBIAN_FRONTEND="noninteractive"
 PACKAGES+=("xz-utils")
 
 if [ ! -L /usr/lib/x86_64-linux-gnu/libGL.so.1 ]; then
-    PACKAGES+=("libgl1-mesa-glx")
+    PACKAGES+=("libgl1")
 fi
 
 if [ ! -L /usr/lib/x86_64-linux-gnu/libxdamage.so.1 ]; then
