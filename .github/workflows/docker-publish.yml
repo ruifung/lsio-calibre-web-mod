@@ -64,9 +64,18 @@ jobs:
         id: get_calibre_release
         shell: bash
         run: |
-          CALIBRE_RELEASE=$(curl -sX GET "https://api.github.com/repos/kovidgoyal/calibre/releases/latest" | awk '/tag_name/{print $4;exit}' FS='[""]')
+          CALIBRE_RELEASE=$(curl -sX GET "https://api.github.com/repos/kovidgoyal/calibre/releases/latest" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            | awk '/tag_name/{print $4;exit}' FS='[""]')
+          
+          if [ -z "$CALIBRE_RELEASE" ]; then
+            echo "ERROR: Failed to fetch Calibre release"
+            exit 1
+          fi
+          
           echo Current calibre release: $CALIBRE_RELEASE
           echo "release=$CALIBRE_RELEASE" >> $GITHUB_OUTPUT
+          
       - name: Extract Base Image Tag
         id: dockerfile_regex
         shell: bash
